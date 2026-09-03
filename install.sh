@@ -15,6 +15,32 @@ if [ ! -d "$SRC" ]; then
   exit 1
 fi
 
+ensure_tmux() {
+  command -v tmux >/dev/null 2>&1 && return 0
+  echo "Installing tmux..."
+  if [ "$OS_DIR" = "linux" ] && command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get update && sudo apt-get install -y tmux
+  elif command -v brew >/dev/null 2>&1; then
+    brew install tmux
+  else
+    echo "No supported package manager found for tmux; install it manually." >&2
+    return 1
+  fi
+}
+
+ensure_herdr() {
+  command -v herdr >/dev/null 2>&1 && return 0
+  echo "Installing herdr..."
+  if command -v brew >/dev/null 2>&1; then
+    brew install herdr
+  else
+    curl -fsSL https://herdr.dev/install.sh | sh
+  fi
+}
+
+ensure_tmux
+ensure_herdr
+
 link() {
   local src="$1" dst="$2"
   [ -e "$src" ] || return 0
@@ -36,6 +62,10 @@ TPM_DIR="$HOME/.tmux/plugins/tpm"
 if [ ! -d "$TPM_DIR" ]; then
   git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
   echo "Installed TPM. Start tmux and press prefix + I to install plugins."
+fi
+
+if [ "$OS_DIR" = "linux" ] && command -v gsettings >/dev/null 2>&1 && [ -n "${DISPLAY:-}${WAYLAND_DISPLAY:-}" ]; then
+  "$REPO_DIR/linux/gnome-terminal/apply.sh" || echo "Skipped GNOME Terminal styling (not the active desktop terminal)."
 fi
 
 echo "Done."
