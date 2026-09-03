@@ -17,6 +17,7 @@ fi
 
 link() {
   local src="$1" dst="$2"
+  [ -e "$src" ] || return 0
   if [ -e "$dst" ] && [ ! -L "$dst" ]; then
     mv "$dst" "$dst.bak.$(date +%Y%m%d%H%M%S)"
     echo "Backed up existing $dst"
@@ -28,6 +29,8 @@ link() {
 
 link "$SRC/tmux/.tmux.conf" "$HOME/.tmux.conf"
 link "$SRC/nvim" "$HOME/.config/nvim"
+link "$SRC/herdr/config.toml" "$HOME/.config/herdr/config.toml"
+link "$SRC/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
 
 TPM_DIR="$HOME/.tmux/plugins/tpm"
 if [ ! -d "$TPM_DIR" ]; then

@@ -1,12 +1,14 @@
 # dotfiles
 
-Personal tmux and nvim configuration, kept in sync across machines.
+Personal tmux, nvim, herdr and Alacritty configuration, kept in sync across machines.
 
 ```
 linux/
 ├── tmux/.tmux.conf
-└── nvim/           # full ~/.config/nvim
-macos/               # added from the Mac
+├── nvim/                 # full ~/.config/nvim
+├── herdr/config.toml
+└── alacritty/alacritty.toml
+macos/                     # added from the Mac
 install.sh
 ```
 
@@ -18,7 +20,8 @@ cd ~/dotfiles
 ./install.sh
 ```
 
-`install.sh` detects the OS (`linux` or `macos`), symlinks `.tmux.conf` and
-`nvim/` into place (backing up anything already there), and clones
+`install.sh` detects the OS (`linux` or `macos`), symlinks each config file
+into place (backing up anything already there), and clones
 [tpm](https://github.com/tmux-plugins/tpm) if missing. After that, start
-tmux and press `prefix + I` to install the tmux plugins.
+tmux and press `prefix + I` to install the tmux plugins. Any config folder
+missing for the current OS is skipped, so `macos/` can lag behind `linux/`.
