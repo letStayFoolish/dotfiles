@@ -57,6 +57,7 @@ link "$SRC/tmux/.tmux.conf" "$HOME/.tmux.conf"
 link "$SRC/nvim" "$HOME/.config/nvim"
 link "$SRC/herdr/config.toml" "$HOME/.config/herdr/config.toml"
 link "$SRC/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
+link "$SRC/iterm2/typecraft.json" "$HOME/Library/Application Support/iTerm2/DynamicProfiles/typecraft.json"
 
 TPM_DIR="$HOME/.tmux/plugins/tpm"
 if [ ! -d "$TPM_DIR" ]; then
@@ -66,6 +67,10 @@ fi
 
 if [ "$OS_DIR" = "linux" ] && command -v gsettings >/dev/null 2>&1 && [ -n "${DISPLAY:-}${WAYLAND_DISPLAY:-}" ]; then
   "$REPO_DIR/linux/gnome-terminal/apply.sh" || echo "Skipped GNOME Terminal styling (not the active desktop terminal)."
+fi
+
+if [ "$OS_DIR" = "macos" ]; then
+  "$REPO_DIR/macos/iterm2/apply.sh" || echo "Skipped iTerm2 setup."
 fi
 
 echo "Done."
